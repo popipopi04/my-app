@@ -18,10 +18,16 @@ node{
    sh 'docker push anbazhagan24s/myweb:0.0.2'
    }
    stage('Nexus Image Push'){
-   sh 'echo "admin123" | docker login -u admin --password-stdin 13.233.179.14:8083'
-   sh "docker tag anbazhagan24s/myweb:0.0.2 13.233.179.14:8083/anbu:1.0.0"
-   sh 'docker push 13.233.179.14:8083/anbu:1.0.0'
-   }
+    // Log in to Docker registry
+    sh 'echo "admin123" | docker login -u admin --password-stdin 13.233.179.14:8083 > /dev/null 2>&1'
+    
+    // Tag the Docker image
+    sh "docker tag anbazhagan24s/myweb:0.0.2 13.233.179.14:8083/anbu:1.0.0"
+
+    // Push the Docker image to the registry
+    sh 'docker push 13.233.179.14:8083/anbu:1.0.0'
+    }
+
     stage('Remove Previous Container'){
 	try{
 		sh 'docker rm -f tomcattest'
